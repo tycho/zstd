@@ -138,7 +138,7 @@ size_t HUF_readDTableX2 (U16* DTable, const void* src, size_t srcSize)
 
 static BYTE HUF_decodeSymbolX2(BIT_DStream_t* Dstream, const HUF_DEltX2* dt, const U32 dtLog)
 {
-    const size_t val = BIT_lookBitsFast(Dstream, dtLog); /* note : dtLog >= 1 */
+    const nint_t val = BIT_lookBitsFast(Dstream, dtLog); /* note : dtLog >= 1 */
     const BYTE c = dt[val].byte;
     BIT_skipBits(Dstream, dt[val].nbBits);
     return c;
@@ -490,7 +490,7 @@ size_t HUF_readDTableX4 (U32* DTable, const void* src, size_t srcSize)
 
 static U32 HUF_decodeSymbolX4(void* op, BIT_DStream_t* DStream, const HUF_DEltX4* dt, const U32 dtLog)
 {
-    const size_t val = BIT_lookBitsFast(DStream, dtLog);   /* note : dtLog >= 1 */
+    const nint_t val = BIT_lookBitsFast(DStream, dtLog);   /* note : dtLog >= 1 */
     memcpy(op, dt+val, 2);
     BIT_skipBits(DStream, dt[val].nbBits);
     return dt[val].length;
@@ -498,7 +498,7 @@ static U32 HUF_decodeSymbolX4(void* op, BIT_DStream_t* DStream, const HUF_DEltX4
 
 static U32 HUF_decodeLastSymbolX4(void* op, BIT_DStream_t* DStream, const HUF_DEltX4* dt, const U32 dtLog)
 {
-    const size_t val = BIT_lookBitsFast(DStream, dtLog);   /* note : dtLog >= 1 */
+    const nint_t val = BIT_lookBitsFast(DStream, dtLog);   /* note : dtLog >= 1 */
     memcpy(op, dt+val, 1);
     if (dt[val].length==1) BIT_skipBits(DStream, dt[val].nbBits);
     else {
@@ -847,7 +847,7 @@ size_t HUF_readDTableX6 (U32* DTable, const void* src, size_t srcSize)
 
 static U32 HUF_decodeSymbolX6(void* op, BIT_DStream_t* DStream, const HUF_DDescX6* dd, const HUF_DSeqX6* ds, const U32 dtLog)
 {
-    const size_t val = BIT_lookBitsFast(DStream, dtLog);   /* note : dtLog >= 1 */
+    const nint_t val = BIT_lookBitsFast(DStream, dtLog);   /* note : dtLog >= 1 */
     memcpy(op, ds+val, sizeof(HUF_DSeqX6));
     BIT_skipBits(DStream, dd[val].nbBits);
     return dd[val].nbBytes;
@@ -856,7 +856,7 @@ static U32 HUF_decodeSymbolX6(void* op, BIT_DStream_t* DStream, const HUF_DDescX
 static U32 HUF_decodeLastSymbolsX6(void* op, const U32 maxL, BIT_DStream_t* DStream,
                                   const HUF_DDescX6* dd, const HUF_DSeqX6* ds, const U32 dtLog)
 {
-    const size_t val = BIT_lookBitsFast(DStream, dtLog);   /* note : dtLog >= 1 */
+    const nint_t val = BIT_lookBitsFast(DStream, dtLog);   /* note : dtLog >= 1 */
     U32 length = dd[val].nbBytes;
     if (length <= maxL) {
         memcpy(op, ds+val, length);

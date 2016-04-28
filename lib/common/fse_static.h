@@ -152,7 +152,7 @@ If there is an error, it returns an errorCode (which can be tested using FSE_isE
 *******************************************/
 typedef struct
 {
-    size_t      state;
+    nint_t      state;
     const void* table;   /* precise table may vary, depending on U16 */
 } FSE_DState_t;
 
@@ -188,7 +188,7 @@ Keep in mind that symbols are decoded in reverse order, like a LIFO stack (last 
 
 You can retrieve any bitfield you eventually stored into the bitStream (in reverse order)
 Note : maximum allowed nbBits is 25, for 32-bits compatibility
-    size_t bitField = BIT_readBits(&DStream, nbBits);
+    nint_t bitField = BIT_readBits(&DStream, nbBits);
 
 All above operations only read from local register (which size depends on size_t).
 Refueling the register from memory is manually performed by the reload method.
@@ -300,7 +300,7 @@ MEM_STATIC void FSE_updateState(FSE_DState_t* DStatePtr, BIT_DStream_t* bitD)
 {
     FSE_decode_t const DInfo = ((const FSE_decode_t*)(DStatePtr->table))[DStatePtr->state];
     U32 const nbBits = DInfo.nbBits;
-    size_t const lowBits = BIT_readBits(bitD, nbBits);
+    nint_t const lowBits = BIT_readBits(bitD, nbBits);
     DStatePtr->state = DInfo.newState + lowBits;
 }
 
@@ -309,7 +309,7 @@ MEM_STATIC BYTE FSE_decodeSymbol(FSE_DState_t* DStatePtr, BIT_DStream_t* bitD)
     FSE_decode_t const DInfo = ((const FSE_decode_t*)(DStatePtr->table))[DStatePtr->state];
     U32 const nbBits = DInfo.nbBits;
     BYTE const symbol = DInfo.symbol;
-    size_t const lowBits = BIT_readBits(bitD, nbBits);
+    nint_t const lowBits = BIT_readBits(bitD, nbBits);
 
     DStatePtr->state = DInfo.newState + lowBits;
     return symbol;
@@ -322,7 +322,7 @@ MEM_STATIC BYTE FSE_decodeSymbolFast(FSE_DState_t* DStatePtr, BIT_DStream_t* bit
     FSE_decode_t const DInfo = ((const FSE_decode_t*)(DStatePtr->table))[DStatePtr->state];
     U32 const nbBits = DInfo.nbBits;
     BYTE const symbol = DInfo.symbol;
-    size_t const lowBits = BIT_readBitsFast(bitD, nbBits);
+    nint_t const lowBits = BIT_readBitsFast(bitD, nbBits);
 
     DStatePtr->state = DInfo.newState + lowBits;
     return symbol;

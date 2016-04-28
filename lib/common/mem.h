@@ -82,6 +82,13 @@ extern "C" {
   typedef   signed long long  S64;
 #endif
 
+#ifdef __x86_64__
+/* On LP64/ILP32, use 64-bit registers. */
+typedef U64 nint_t;
+#else
+/* On everything else, assume that sizeof(size_t) == the native register size. */
+typedef size_t nint_t;
+#endif
 
 /*-**************************************************************
 *  Memory I/O
@@ -259,17 +266,17 @@ MEM_STATIC void MEM_writeLE64(void* memPtr, U64 val64)
     }
 }
 
-MEM_STATIC size_t MEM_readLEST(const void* memPtr)
+MEM_STATIC nint_t MEM_readLEST(const void* memPtr)
 {
-    if (MEM_32bits())
-        return (size_t)MEM_readLE32(memPtr);
+    if (sizeof(nint_t) == 4)
+        return (nint_t)MEM_readLE32(memPtr);
     else
-        return (size_t)MEM_readLE64(memPtr);
+        return (nint_t)MEM_readLE64(memPtr);
 }
 
-MEM_STATIC void MEM_writeLEST(void* memPtr, size_t val)
+MEM_STATIC void MEM_writeLEST(void* memPtr, nint_t val)
 {
-    if (MEM_32bits())
+    if (sizeof(nint_t) == 4)
         MEM_writeLE32(memPtr, (U32)val);
     else
         MEM_writeLE64(memPtr, (U64)val);
