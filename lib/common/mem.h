@@ -115,8 +115,8 @@ typedef size_t nint_t;
 #  endif
 #endif
 
-MEM_STATIC unsigned MEM_32bits(void) { return sizeof(void*)==4; }
-MEM_STATIC unsigned MEM_64bits(void) { return sizeof(void*)==8; }
+MEM_STATIC unsigned MEM_32bits(void) { return sizeof(nint_t)==4; }
+MEM_STATIC unsigned MEM_64bits(void) { return sizeof(nint_t)==8; }
 
 MEM_STATIC unsigned MEM_isLittleEndian(void)
 {
